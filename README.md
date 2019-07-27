@@ -14,7 +14,7 @@ for i in `cat SRA_HMP.txt`; do runMetaphyler.pl ${i}_join.fastq_good_out.fasta b
 # Use DIAMOND (https://github.com/bbuchfink/diamond) to align the FASTA files to the reference database.
 for i in `cat SRA.txt`; do diamond blastx -d diamond_ref/reference -q $i -o ${i}_matches.m8 -p 36; done
 
-# The follwoing was performed in R
+# The following was performed in R
 library(plyr)
 
 tab=read.table("diamond_results",header=F)
