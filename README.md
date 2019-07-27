@@ -16,22 +16,39 @@ for i in `cat SRA.txt`; do diamond blastx -d diamond_ref/reference -q $i -o ${i}
 
 # The follwoing was performed in R
 library(plyr)
+
 tab=read.table("diamond_results",header=F)
+
 colnames(tab)[1]="query.acc."
+
 colnames(tab)[2]="reference.acc."
+
 tab$reference.acc.="BG"
+
 tab$seq=sub("..$","",tab$query.acc.)
+
 tab2=tab[!duplicated(tab[,"seq"]),]
+
 tab2$SRA=sub("\\..*","",tab2$seq)
+
 df <- count(tab2, c('SRA','reference.acc.'))
+
 taxa=read.table("result_taxa.txt",header=F)
+
 colnames(taxa)=c("SRA","phyla")
+
 final=merge(df, taxa, all.x = TRUE)
+
 metadata=read.csv("metadata.csv",header=T)
+
 final2=merge(final, metadata, all.x = TRUE)
+
 final2$norm_count=((final2$freq)*1000/final2$phyla)
+
 final2 <- na.omit(final2)
+
 final2$trans_norm_count=log10(final2$norm_count)
+
 write.csv(final2,"betaglucuronidase.csv")
 
 
